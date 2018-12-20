@@ -1,3 +1,5 @@
 .DS_Store
 *.zip
 .ipynb_checkpoints
+project-practice/independent_component_analysis/data/
+project-practice/pca/data/
