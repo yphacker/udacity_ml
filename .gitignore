@@ -3,3 +3,7 @@
 .ipynb_checkpoints
 project-practice/independent_component_analysis/data/
 project-practice/pca/data/
+project4-dog_app/dogImages
+project4-dog_app/lfw
+project4-dog_app/Dog*
+
