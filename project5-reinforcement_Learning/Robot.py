@@ -1,4 +1,5 @@
 import random
+import math
 import numpy as np
 
 class Robot(object):
@@ -43,13 +44,25 @@ class Robot(object):
         """
         if self.testing:
             # TODO 1. No random choice when testing
-            self.epsilon = 0.0
+            self.epsilon = 0
         else:
             # TODO 2. Update parameters when learning
-            self.t += 1
-            self.epsilon = self.epsilon0 / self.t
-
-        return self.epsilon
+            
+            # self.t不能每次增加的太大，不然会导致self.epsilon减小的太快，导致agent不能得到充分的学习
+            # self.t也不能每次增加的太小，不然会导致self.epsilon减小的太慢，需要大量的训练次数
+            # self.t += 10
+            # self.epsilon = self.epsilon0 / (1 + self.t)
+            # 根据审阅优化
+            self.t += 5
+            self.epsilon = self.epsilon0 / (1 + self.t)
+#             self.alpha = round(math.cos(self.t / 10), 2)
+#             if self.alpha < 0.01:
+#                 self.alpha = 0.01
+#             self.epsilon = self.epsilon0 * round(math.cos(self.t / 10), 2)
+#             if self.epsilon < 0.01:
+#                 self.epsilon = 0.01
+#             self.alpha = 1 / (1 + self.t)
+        return self.epsilon 
 
     def sense_state(self):
         """
@@ -102,7 +115,7 @@ class Robot(object):
         if self.learning:
             # TODO 8. When learning, update the q table according
             # to the given rules
-            self.Qtable[self.state][action] += self.alpha * (r + self.gamma * (max(self.Qtable[next_state].values())) - self.Qtable[self.state][action])
+            self.Qtable[self.state][action] = (1 - self.alpha) * self.Qtable[self.state][action] + self.alpha * (r + self.gamma * max(self.Qtable[next_state].values()))
 
     def update(self):
         """
